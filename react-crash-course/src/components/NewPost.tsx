@@ -1,21 +1,24 @@
-import { useState } from "react";
+import { ChangeEventHandler } from "react";
 import classes from "./NewPost.module.css";
 
-function NewPost() {
-  const [postText, setPostText] = useState("");
-  function changeBodyHandler(event: React.ChangeEvent<HTMLTextAreaElement>) {
-    setPostText(event.target.value);
-  }
+function NewPost(props: {
+  onPostTextChange: ChangeEventHandler<HTMLTextAreaElement> | undefined;
+  onAuthorChange: ChangeEventHandler<HTMLInputElement> | undefined;
+}) {
   return (
     <form className={classes.form}>
       <p>
         <label htmlFor="body">Text</label>
-        <textarea id="body" required rows={3} onChange={changeBodyHandler} />
+        <textarea
+          id="body"
+          required
+          rows={3}
+          onChange={props.onPostTextChange}
+        />
       </p>
-      <p>{postText}</p>
       <p>
         <label htmlFor="name">Your name</label>
-        <input type="text" id="name" required />
+        <input type="text" id="name" required onChange={props.onAuthorChange} />
       </p>
     </form>
   );
