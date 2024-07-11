@@ -1,6 +1,11 @@
 import classes from "./Modal.module.css";
 
-function Modal(props: { children: JSX.Element, onClose: React.MouseEventHandler<HTMLDivElement> }) {
+interface ModalProps{
+    children: JSX.Element;
+    onClose: React.MouseEventHandler<HTMLDivElement>;
+}
+
+function Modal(props: ModalProps) {
   return (
     <>
       <div className={classes.backdrop} onClick={props.onClose} />

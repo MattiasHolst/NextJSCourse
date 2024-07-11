@@ -4,14 +4,15 @@ import Post from "./Post";
 import classes from "./PostsList.module.css";
 import Modal from "./Modal";
 
-function PostsList() {
-  const [modalOpen, setModalOpen] = useState(true);
+interface PostListProps {
+  isPosting: boolean;
+  onStopPosting: React.MouseEventHandler<HTMLDivElement>;
+}
+
+
+function PostsList(props: PostListProps) {
   const [postText, setPostText] = useState("Default text");
   const [author, setAuthor] = useState("Mattias");
-
-  function hideModalHandler() {
-    setModalOpen(false);
-  }
 
   function postTextHandler(event: React.ChangeEvent<HTMLTextAreaElement>) {
     setPostText(event.target.value);
@@ -23,14 +24,14 @@ function PostsList() {
 
   return (
     <>
-      {modalOpen && (
-        <Modal onClose={hideModalHandler}>
+      {props.isPosting && (
+        <Modal onClose={props.onStopPosting}>
           <NewPost
             onPostTextChange={postTextHandler}
             onAuthorChange={authorChangeHandler}
           />
         </Modal>
-      ) }
+      )}
 
       <ul className={classes.posts}>
         <Post author={author} body={postText} />

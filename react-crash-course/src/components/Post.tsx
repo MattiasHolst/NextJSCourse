@@ -1,6 +1,11 @@
 import classes from "./Post.module.css";
 
-function Post(props: { author: string; body: string }) {
+interface PostProps {
+  author: string;
+  body:string;
+}
+
+function Post(props: PostProps) {
   return (
     <li className={classes.post}>
       <p className={classes.author}>{props.author}</p>

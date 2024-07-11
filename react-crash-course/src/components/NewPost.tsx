@@ -1,10 +1,12 @@
 import { ChangeEventHandler } from "react";
 import classes from "./NewPost.module.css";
 
-function NewPost(props: {
+interface NewPostProps {
   onPostTextChange: ChangeEventHandler<HTMLTextAreaElement> | undefined;
   onAuthorChange: ChangeEventHandler<HTMLInputElement> | undefined;
-}) {
+}
+
+function NewPost(props: NewPostProps) {
   return (
     <form className={classes.form}>
       <p>
