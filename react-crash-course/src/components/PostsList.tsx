@@ -6,7 +6,7 @@ import Modal from "./Modal";
 
 interface PostListProps {
   isPosting: boolean;
-  onStopPosting: React.MouseEventHandler<HTMLDivElement>;
+  onStopPosting: React.MouseEventHandler<HTMLDivElement | HTMLButtonElement>;
 }
 
 
@@ -29,6 +29,7 @@ function PostsList(props: PostListProps) {
           <NewPost
             onPostTextChange={postTextHandler}
             onAuthorChange={authorChangeHandler}
+            onCancelPosting={props.onStopPosting}
           />
         </Modal>
       )}

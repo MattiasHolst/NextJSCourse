@@ -4,6 +4,7 @@ import classes from "./NewPost.module.css";
 interface NewPostProps {
   onPostTextChange: ChangeEventHandler<HTMLTextAreaElement> | undefined;
   onAuthorChange: ChangeEventHandler<HTMLInputElement> | undefined;
+  onCancelPosting: React.MouseEventHandler<HTMLButtonElement>;
 }
 
 function NewPost(props: NewPostProps) {
@@ -21,6 +22,10 @@ function NewPost(props: NewPostProps) {
       <p>
         <label htmlFor="name">Your name</label>
         <input type="text" id="name" required onChange={props.onAuthorChange} />
+      </p>
+      <p className={classes.actions}>
+        <button type='button' onClick={props.onCancelPosting}>Cancel</button>
+        <button>Submit</button>
       </p>
     </form>
   );
