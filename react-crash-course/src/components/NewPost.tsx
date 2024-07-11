@@ -1,8 +1,10 @@
 import { useState } from "react";
 import classes from "./NewPost.module.css";
+import { PostData } from "./PostsList";
 
 interface NewPostProps {
-  onCancelPosting: () => void
+  onCancelPosting: () => void;
+  onAddPost: (postdata: PostData) => void;
 }
 
 function NewPost(props: NewPostProps) {
@@ -24,6 +26,7 @@ function NewPost(props: NewPostProps) {
       author: author,
     };
     console.log(postData);
+    props.onAddPost(postData);
     props.onCancelPosting();
   }
   return (
