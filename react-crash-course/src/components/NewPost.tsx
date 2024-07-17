@@ -25,7 +25,6 @@ function NewPost(props: NewPostProps) {
       body: postText,
       author: author,
     };
-    console.log(postData);
     props.onAddPost(postData);
     props.onCancelPosting();
   }

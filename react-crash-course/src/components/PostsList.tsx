@@ -18,22 +18,32 @@ function PostsList(props: PostListProps) {
   const [posts, setPosts] = useState<PostData[]>([]);
 
   function addPostHandler(postData: PostData) {
-    setPosts((existingPosts: PostData[]) =>  [postData, ...existingPosts]);
+    setPosts((existingPosts: PostData[]) => [postData, ...existingPosts]);
   }
-
-  console.log('posts : ', posts);
 
   return (
     <>
       {props.isPosting && (
         <Modal onClose={props.onStopPosting}>
-          <NewPost onCancelPosting={props.onStopPosting} onAddPost={addPostHandler} />
+          <NewPost
+            onCancelPosting={props.onStopPosting}
+            onAddPost={addPostHandler}
+          />
         </Modal>
       )}
-
-      <ul className={classes.posts}>
-        <Post author="Gandalf" body="Brotherhood" />
-      </ul>
+      {posts.length > 0 && (
+        <ul className={classes.posts}>
+          {posts.map((post, i) => (
+            <Post key={i} author={post.author} body={post.body} />
+          ))}
+        </ul>
+      )}
+      {posts.length === 0 && (
+        <div style={{ textAlign: "center", color: "white" }}>
+          <h2>There are no posts yet.</h2>
+          <p>Start adding some!</p>
+        </div>
+      )}
     </>
   );
 }
