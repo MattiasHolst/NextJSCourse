@@ -1,9 +1,10 @@
 import { useState } from "react";
 import classes from "./NewPost.module.css";
-import { PostData } from "./PostsList";
+import { PostData } from "../components/PostsList";
+import Modal from "../components/Modal";
+import { Link } from "react-router-dom";
 
 interface NewPostProps {
-  onCancelPosting: () => void;
   onAddPost: (postdata: PostData) => void;
 }
 
@@ -26,25 +27,31 @@ function NewPost(props: NewPostProps) {
       author: author,
     };
     props.onAddPost(postData);
-    props.onCancelPosting();
   }
   return (
-    <form className={classes.form} onSubmit={handleSubmit}>
-      <p>
-        <label htmlFor="body">Text</label>
-        <textarea id="body" required rows={3} onChange={postTextHandler} />
-      </p>
-      <p>
-        <label htmlFor="name">Your name</label>
-        <input type="text" id="name" required onChange={authorChangeHandler} />
-      </p>
-      <p className={classes.actions}>
-        <button type="button" onClick={props.onCancelPosting}>
-          Cancel
-        </button>
-        <button>Submit</button>
-      </p>
-    </form>
+    <Modal>
+      <form className={classes.form} onSubmit={handleSubmit}>
+        <p>
+          <label htmlFor="body">Text</label>
+          <textarea id="body" required rows={3} onChange={postTextHandler} />
+        </p>
+        <p>
+          <label htmlFor="name">Your name</label>
+          <input
+            type="text"
+            id="name"
+            required
+            onChange={authorChangeHandler}
+          />
+        </p>
+        <p className={classes.actions}>
+          <Link to='..' type="button">
+            Cancel
+          </Link>
+          <button>Submit</button>
+        </p>
+      </form>
+    </Modal>
   );
 }
 
