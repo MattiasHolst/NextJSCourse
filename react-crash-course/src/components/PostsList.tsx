@@ -10,17 +10,6 @@ export type PostData = {
 function PostsList() {
   const posts = useLoaderData() as PostData[];
 
-  function addPostHandler(postData: PostData) {
-    fetch("http://localhost:8080/posts", {
-      method: "POST",
-      body: JSON.stringify(postData),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-    //setPosts((existingPosts: PostData[]) => [postData, ...existingPosts]);
-  }
-
   return (
     <>
       {posts.length > 0 && (
