@@ -5,6 +5,7 @@ import { useLoaderData } from "react-router-dom";
 export type PostData = {
   body: string;
   author: string;
+  id: string;
 };
 
 function PostsList() {
@@ -14,8 +15,8 @@ function PostsList() {
     <>
       {posts.length > 0 && (
         <ul className={classes.posts}>
-          {posts.map((post, i) => (
-            <Post key={i} author={post.author} body={post.body} />
+          {posts.map((post) => (
+            <Post key={post.id} id={post.id} author={post.author} body={post.body} />
           ))}
         </ul>
       )}
