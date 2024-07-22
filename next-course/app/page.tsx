@@ -1,13 +1,15 @@
 import Link from "next/link";
 import styles from "./page.module.css";
+import Header from "@/components/header";
 
 export default function Home() {
   return (
     <main className={styles.main}>
-      <img src="/logo.png" alt="cool image" />
-      <h1>Welcome to this NextJS Course!</h1>
+      <Header />
       <p> Let's get started!</p>
-      <p><Link href="/about">About Us</Link></p>
+      <p>
+        <Link href="/about">About Us</Link>
+      </p>
     </main>
   );
 }
