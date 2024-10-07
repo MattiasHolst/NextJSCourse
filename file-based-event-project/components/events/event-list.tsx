@@ -1,9 +1,10 @@
 import { EventType } from "@/dummy-data";
 import EventItem from "./event-item";
+import classes from "@/styles/event-list.module.css";
 
 export default function EventList({ events }: { events: EventType[] }) {
   return (
-    <ul>
+    <ul className={classes.list}>
       {events.map((event) => (
         <EventItem key={event.id} event={event} />
       ))}
