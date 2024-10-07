@@ -6,7 +6,10 @@ export default function ClientProjectsPage() {
   function loadProjectHandler() {
     // load data etc...
 
-    router.replace('/clients/mattias/projecta');
+    router.push({
+      pathname: "/clients/[id]/[clientprojectid]",
+      query: { id: "matte", clientprojectid: "projecta" },
+    });
   }
 
   return (
