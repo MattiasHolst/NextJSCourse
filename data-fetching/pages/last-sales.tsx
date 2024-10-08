@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import useSWR from "swr";
 
 type TransformedSalesType = {
   id: string;
@@ -8,33 +9,33 @@ type TransformedSalesType = {
 
 export default function LastSalesPage() {
   const [sales, setSales] = useState<TransformedSalesType[]>();
-  const [isLoading, setIsLoading] = useState(false);
-  useEffect(() => {
-    setIsLoading(true);
-    fetch(
-      "https://nextjs-course-493d9-default-rtdb.europe-west1.firebasedatabase.app/sales.json"
-    )
-      .then((response) => response.json())
-      .then((data) => {
-        const transformedSales = [];
-        for (const key in data) {
-          transformedSales.push({
-            id: key,
-            username: data[key].username,
-            volume: data[key].volume,
-          });
-        }
-        setSales(transformedSales);
-        setIsLoading(false);
-      });
-  }, []);
 
-  if (isLoading) {
-    return <p>Loading...</p>;
+  const { data, error } = useSWR(
+    "https://nextjs-course-493d9-default-rtdb.europe-west1.firebasedatabase.app/sales.json",
+    (url) => fetch(url).then((res) => res.json())
+  );
+
+  useEffect(() => {
+    if (data) {
+      const transformedSales = [];
+      for (const key in data) {
+        transformedSales.push({
+          id: key,
+          username: data[key].username,
+          volume: data[key].volume,
+        });
+      }
+
+      setSales(transformedSales);
+    }
+  }, [data]);
+
+  if (error) {
+    return <p>Failed to load</p>;
   }
 
-  if (!sales) {
-    return <p>No data yet</p>;
+  if (!data || !sales) {
+    return <p>Loading...</p>;
   }
 
   return (
