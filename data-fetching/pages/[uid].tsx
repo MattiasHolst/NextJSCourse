@@ -1,20 +1,20 @@
 import { GetServerSidePropsContext } from "next";
 
 type UserType = {
-  username: string;
+  id: string;
 };
 
-export default function UserProfilePage(props: UserType) {
-  return <h1>{props.username}</h1>;
+export default function UserIdPage(props: UserType) {
+  return <h1>{props.id}</h1>;
 }
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
-  const { params, req, res } = context;
-
+  const { params } = context;
+  const userId = params?.uid;
 
   return {
     props: {
-      username: "Matte",
+      id: "userid-" + userId,
     },
   };
 }

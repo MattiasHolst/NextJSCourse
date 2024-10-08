@@ -1,5 +1,5 @@
 import fs from "fs/promises";
-import { GetStaticProps } from "next";
+import { GetStaticProps, GetStaticPropsContext } from "next";
 import Link from "next/link";
 import path from "path";
 
@@ -14,14 +14,14 @@ function HomePage(props: {
     <ul>
       {products.map((product) => (
         <li key={product.id}>
-          <Link href={`/${product.id}`}>{product.title}</Link>
+          <Link href={`/products/${product.id}`}>{product.title}</Link>
         </li>
       ))}
     </ul>
   );
 }
 
-export async function getStaticProps(context: GetStaticProps) {
+export async function getStaticProps(context: GetStaticPropsContext) {
   console.log("(RE-)Generating...");
   const filePath = path.join(process.cwd(), "data", "dummy-backend.json");
   const jsonData = await fs.readFile(filePath);
