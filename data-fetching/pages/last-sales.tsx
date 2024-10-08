@@ -7,8 +7,12 @@ type TransformedSalesType = {
   volume: number;
 };
 
-export default function LastSalesPage() {
-  const [sales, setSales] = useState<TransformedSalesType[]>();
+type PreRenderedSalesType = {
+  sales: TransformedSalesType[];
+};
+
+export default function LastSalesPage(props: PreRenderedSalesType) {
+  const [sales, setSales] = useState<TransformedSalesType[]>(props.sales);
 
   const { data, error } = useSWR(
     "https://nextjs-course-493d9-default-rtdb.europe-west1.firebasedatabase.app/sales.json",
@@ -34,7 +38,7 @@ export default function LastSalesPage() {
     return <p>Failed to load</p>;
   }
 
-  if (!data || !sales) {
+  if (!data && !sales) {
     return <p>Loading...</p>;
   }
 
@@ -47,4 +51,23 @@ export default function LastSalesPage() {
       ))}
     </ul>
   );
+}
+
+export async function getStaticProps() {
+  return fetch(
+    "https://nextjs-course-493d9-default-rtdb.europe-west1.firebasedatabase.app/sales.json"
+  )
+    .then((response) => response.json())
+    .then((data) => {
+      const transformedSales = [];
+      for (const key in data) {
+        transformedSales.push({
+          id: key,
+          username: data[key].username,
+          volume: data[key].volume,
+        });
+      }
+
+      return { props: { sales: transformedSales }, revalidate: 10 };
+    });
 }
