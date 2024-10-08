@@ -10,10 +10,6 @@ function HomePage(props: {
   const { products } = props;
   return (
     <ul>
-      {/* <li>Produkt 1</li>
-        <li>Produkt 2</li>
-        <li>Produkt 3</li> */}
-
       {products.map((product) => (
         <li key={product.id}>{product.title}</li>
       ))}
