@@ -3,9 +3,8 @@ import EventLogistics from "@/components/event-detail/event-logistics";
 import EventSummary from "@/components/event-detail/event-summary";
 import ErrorAlert from "@/components/ui/error-alert";
 import { EventType } from "@/dummy-data";
-import { getAllEvents, getEventById } from "@/helpers/api-utils";
+import { getEventById, getFeaturedEvents } from "@/helpers/api-utils";
 import { GetStaticPropsContext } from "next";
-import { useRouter } from "next/router";
 
 type EventDetailType = {
   event: EventType;
@@ -15,9 +14,9 @@ export default function EventDetailPage(props: EventDetailType) {
   const event = props.event;
   if (!event) {
     return (
-      <ErrorAlert>
-        <p>No event found!</p>
-      </ErrorAlert>
+      <div className="center">
+        <p>Loading...</p>
+      </div>
     );
   }
   return (
@@ -47,11 +46,12 @@ export async function getStaticProps(context: GetStaticPropsContext) {
 
   return {
     props: { event },
+    revalidate: 30,
   };
 }
 
 export async function getStaticPaths() {
-  const events = await getAllEvents();
+  const events = await getFeaturedEvents();
 
   const paths = events.map((event) => ({
     params: { eventId: event.id },
@@ -59,6 +59,6 @@ export async function getStaticPaths() {
 
   return {
     paths,
-    fallback: false,
+    fallback: true,
   };
 }
