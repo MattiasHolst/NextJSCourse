@@ -2,13 +2,17 @@ import EventContent from "@/components/event-detail/event-content";
 import EventLogistics from "@/components/event-detail/event-logistics";
 import EventSummary from "@/components/event-detail/event-summary";
 import ErrorAlert from "@/components/ui/error-alert";
-import { getEventById } from "@/dummy-data";
+import { EventType } from "@/dummy-data";
+import { getAllEvents, getEventById } from "@/helpers/api-utils";
+import { GetStaticPropsContext } from "next";
 import { useRouter } from "next/router";
 
-export default function EventDetailPage() {
-  const router = useRouter();
-  const eventId = router.query.eventId as string;
-  const event = getEventById(eventId);
+type EventDetailType = {
+  event: EventType;
+};
+
+export default function EventDetailPage(props: EventDetailType) {
+  const event = props.event;
   if (!event) {
     return (
       <ErrorAlert>
@@ -30,4 +34,31 @@ export default function EventDetailPage() {
       </EventContent>
     </>
   );
+}
+
+export async function getStaticProps(context: GetStaticPropsContext) {
+  const eventId = context.params?.eventId;
+
+  if (!eventId) {
+    return;
+  }
+
+  const event = await getEventById(eventId as string);
+
+  return {
+    props: { event },
+  };
+}
+
+export async function getStaticPaths() {
+  const events = await getAllEvents();
+
+  const paths = events.map((event) => ({
+    params: { eventId: event.id },
+  }));
+
+  return {
+    paths,
+    fallback: false,
+  };
 }
