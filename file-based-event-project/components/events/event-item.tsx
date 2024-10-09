@@ -1,9 +1,10 @@
-import { EventType } from "@/dummy-data";
 import classes from "@/styles/event-item.module.css";
 import Button from "../ui/button";
 import DateIcon from "../icons/date-icon";
 import AddressIcon from "../icons/address-icon";
 import ArrowRightIcon from "../icons/arrow-right-icon";
+import { EventType } from "@/helpers/api-utils";
+import Image from "next/image";
 
 export default function EventItem({ event }: { event: EventType }) {
   const humanReadableDate = new Date(event.date).toLocaleDateString("en-US", {
@@ -18,7 +19,12 @@ export default function EventItem({ event }: { event: EventType }) {
 
   return (
     <li className={classes.item}>
-      <img src={"/" + event.image} alt={event.title} />
+      <Image
+        src={"/" + event.image}
+        alt={event.title}
+        width={250}
+        height={160}
+      />
       <div className={classes.content}>
         <div className={classes.summary}>
           <h2>{event.title}</h2>
