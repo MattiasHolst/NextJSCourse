@@ -1,9 +1,7 @@
 import EventContent from "@/components/event-detail/event-content";
 import EventLogistics from "@/components/event-detail/event-logistics";
 import EventSummary from "@/components/event-detail/event-summary";
-import ErrorAlert from "@/components/ui/error-alert";
-import { EventType } from "@/dummy-data";
-import { getEventById, getFeaturedEvents } from "@/helpers/api-utils";
+import { EventType, getEventById, getFeaturedEvents } from "@/helpers/api-utils";
 import { GetStaticPropsContext } from "next";
 
 type EventDetailType = {

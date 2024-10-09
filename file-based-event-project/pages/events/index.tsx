@@ -1,7 +1,6 @@
 import EventList from "@/components/events/event-list";
 import EventsSearch from "@/components/events/events-search";
-import { EventType } from "@/dummy-data";
-import { getAllEvents } from "@/helpers/api-utils";
+import { EventType, getAllEvents } from "@/helpers/api-utils";
 import { useRouter } from "next/router";
 
 type EventPageType = {

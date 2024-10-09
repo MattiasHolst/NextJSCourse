@@ -1,6 +1,5 @@
 import EventList from "@/components/events/event-list";
-import { EventType } from "@/dummy-data";
-import { getFeaturedEvents } from "@/helpers/api-utils";
+import { EventType, getFeaturedEvents } from "@/helpers/api-utils";
 
 type FeaturedEventType = {
   featuredEvents: EventType[];
@@ -20,6 +19,6 @@ export async function getStaticProps() {
     props: {
       featuredEvents: featuredEvents,
     },
-    revalidate: 1800
+    revalidate: 1800,
   };
 }
