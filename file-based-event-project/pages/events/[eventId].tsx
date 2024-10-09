@@ -1,8 +1,13 @@
 import EventContent from "@/components/event-detail/event-content";
 import EventLogistics from "@/components/event-detail/event-logistics";
 import EventSummary from "@/components/event-detail/event-summary";
-import { EventType, getEventById, getFeaturedEvents } from "@/helpers/api-utils";
+import {
+  EventType,
+  getEventById,
+  getFeaturedEvents,
+} from "@/helpers/api-utils";
 import { GetStaticPropsContext } from "next";
+import Head from "next/head";
 
 type EventDetailType = {
   event: EventType;
@@ -19,6 +24,10 @@ export default function EventDetailPage(props: EventDetailType) {
   }
   return (
     <>
+      <Head>
+        <title>{event.title}</title>
+        <meta name="description" content={event.description} />
+      </Head>
       <EventSummary title={event.title} />
       <EventLogistics
         address={event.location}
