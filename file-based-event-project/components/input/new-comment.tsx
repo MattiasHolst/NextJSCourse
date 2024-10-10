@@ -1,14 +1,9 @@
 import { FormEvent, useRef, useState } from "react";
 import classes from "./new-comment.module.css";
-
-export type CommentType = {
-  email: string;
-  name: string;
-  text: string;
-};
+import { CommentDataType } from "@/pages/api/comments/[id]";
 
 interface Props {
-  onAddComment: (commentdata: CommentType) => void;
+  onAddComment: (commentdata: CommentDataType) => void;
 }
 
 function NewComment(props: Props) {
@@ -46,7 +41,7 @@ function NewComment(props: Props) {
   }
 
   return (
-    <form className={classes.form}>
+    <form className={classes.form} onSubmit={sendCommentHandler}>
       <div className={classes.row}>
         <div className={classes.control}>
           <label htmlFor="email">Your email</label>

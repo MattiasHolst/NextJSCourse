@@ -4,7 +4,7 @@ import path from "path";
 
 type Data = {
   message?: string;
-  comment?: CommentDataType[];
+  comments?: CommentDataType[];
 };
 
 export type CommentDataType = {
@@ -43,7 +43,7 @@ export default function handler(
       text: commentData.text,
     };
 
-    res.status(201).json({ message: "Success!", comment: [newComment] });
+    res.status(201).json({ message: "Success!", comments: [newComment] });
   }
   if (req.method === "GET") {
     console.log("get comments for event : ", eventId);
@@ -64,7 +64,7 @@ export default function handler(
 
     res.status(200).json({
       message: "Success!",
-      comment: dummyComments,
+      comments: dummyComments,
     });
   }
 }
