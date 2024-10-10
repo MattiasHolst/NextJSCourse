@@ -17,11 +17,11 @@ export type FeedbackGetType = {
   feedback: FeedbackPostType[];
 };
 
-function buildFeedbackPath() {
+export function buildFeedbackPath() {
   return path.join(process.cwd(), "data", "feedback.json");
 }
 
-function extractFeedback(filePath: string) {
+export function extractFeedback(filePath: string) {
   const fileData = fs.readFileSync(filePath);
   const fileContent = fileData.toString();
 
