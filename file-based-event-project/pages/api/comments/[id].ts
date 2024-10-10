@@ -1,4 +1,5 @@
 import fs from "fs";
+import { MongoClient } from "mongodb";
 import { NextApiRequest, NextApiResponse } from "next";
 import path from "path";
 
@@ -12,12 +13,18 @@ export type CommentDataType = {
   email: string;
   name: string;
   text: string;
+  eventId?: string;
 };
-export default function handler(
+export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<Data>
 ) {
   const eventId = req.query.id;
+
+  const client = await MongoClient.connect(
+    "mongodb+srv://holstmattias:mZ8cZNgL4gR2xwqW@cluster0.cqxwd.mongodb.net/events?retryWrites=true&w=majority&appName=Cluster0"
+  );
+
   if (req.method === "POST") {
     const commentData = req.body as CommentDataType;
 
@@ -33,15 +40,26 @@ export default function handler(
       res.status(422).json({ message: "Text not specified" });
       return;
     }
+    if (!eventId) {
+      res.status(422).json({ message: "Eventid not sepcified" });
+      return;
+    }
 
     console.log("Comment : ", commentData, " saved to event id : ", eventId);
 
     const newComment = {
-      id: new Date().toISOString(),
+      id: "",
       email: commentData.email,
       name: commentData.name,
       text: commentData.text,
+      eventId: eventId as string,
     };
+
+    const db = client.db();
+
+    const result = await db.collection("comments").insertOne(newComment);
+
+    newComment.id = result.insertedId.toString();
 
     res.status(201).json({ message: "Success!", comments: [newComment] });
   }
@@ -67,4 +85,6 @@ export default function handler(
       comments: dummyComments,
     });
   }
+
+  client.close();
 }
