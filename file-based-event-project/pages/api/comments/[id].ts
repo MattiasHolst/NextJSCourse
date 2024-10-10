@@ -45,7 +45,7 @@ export default async function handler(
       return;
     }
 
-    console.log("Comment : ", commentData, " saved to event id : ", eventId);
+    
 
     const newComment = {
       id: "",
