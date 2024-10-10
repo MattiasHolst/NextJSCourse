@@ -1,5 +1,5 @@
 import fs from "fs";
-import { MongoClient } from "mongodb";
+import { MongoClient, WithId } from "mongodb";
 import { NextApiRequest, NextApiResponse } from "next";
 import path from "path";
 
@@ -9,7 +9,7 @@ type Data = {
 };
 
 export type CommentDataType = {
-  id?: string;
+  _id?: string;
   email: string;
   name: string;
   text: string;
@@ -64,25 +64,28 @@ export default async function handler(
     res.status(201).json({ message: "Success!", comments: [newComment] });
   }
   if (req.method === "GET") {
-    console.log("get comments for event : ", eventId);
-    const dummyComments = [
-      {
-        id: "c1",
-        name: "Gandalf",
-        email: "test@test.se",
-        text: "Gandalf is cool",
-      },
-      {
-        id: "c1",
-        name: "Aragorn",
-        email: "test2@test.se",
-        text: "Hello Gandalf",
-      },
-    ];
+    const db = client.db();
+
+    const documents = await db
+      .collection("comments")
+      .find()
+      .sort({ _id: -1 })
+      .toArray();
+
+    const comments = documents.map(
+      (doc) =>
+        ({
+          _id: doc._id?.toString(),
+          email: doc.email,
+          name: doc.name,
+          text: doc.text,
+          eventId: doc.eventId,
+        } as CommentDataType)
+    );
 
     res.status(200).json({
       message: "Success!",
-      comments: dummyComments,
+      comments: comments,
     });
   }
 
