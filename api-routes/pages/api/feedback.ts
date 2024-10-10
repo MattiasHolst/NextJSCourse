@@ -27,7 +27,14 @@ export default function handler(
     };
     const filePath = path.join(process.cwd(), "data", "feedback.json");
     const fileData = fs.readFileSync(filePath);
-    const data = JSON.parse(fileData.toString());
+    const fileContent = fileData.toString();
+
+    let data;
+    if (fileContent) {
+      data = JSON.parse(fileContent);
+    } else {
+      data = []; // or any default value you prefer
+    }
 
     data.push(newFeedback);
     fs.writeFileSync(filePath, JSON.stringify(data));
