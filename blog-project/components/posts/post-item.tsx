@@ -1,9 +1,9 @@
 import Link from "next/link";
-import { PostType } from "./posts-grid";
 import Image from "next/image";
 import classes from "./post-item.module.css";
+import { PostDataType } from "@/lib/posts-util";
 
-export default function PostItem({ post }: { post: PostType }) {
+export default function PostItem({ post }: { post: PostDataType }) {
   const formattedDate = new Date(post.date).toLocaleDateString("en-US", {
     day: "numeric",
     month: "long",
@@ -11,6 +11,8 @@ export default function PostItem({ post }: { post: PostType }) {
   });
 
   const imagePath = `/images/posts/${post.slug}/${post.image}`;
+
+  console.log('imagePath is : ', imagePath);
   const linkPath = `/posts/${post.slug}`;
   return (
     <li className={classes.post}>

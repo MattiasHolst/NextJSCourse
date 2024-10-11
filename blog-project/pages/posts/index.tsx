@@ -1,6 +1,16 @@
 import AllPosts from "@/components/posts/all-posts";
-import { DUMMY_POSTS } from "..";
+import { getAllPosts, PostDataType } from "@/lib/posts-util";
 
-export default function AllPostsPage() {
-  return <AllPosts posts={DUMMY_POSTS} />;
+export default function AllPostsPage({ posts }: { posts: PostDataType[] }) {
+  return <AllPosts posts={posts} />;
+}
+
+export async function getStaticProps() {
+  const posts = getAllPosts();
+
+  return {
+    props: {
+      posts,
+    },
+  };
 }

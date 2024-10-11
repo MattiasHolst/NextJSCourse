@@ -1,15 +1,8 @@
 import classes from "./posts-grid.module.css";
 import PostItem from "./post-item";
+import { PostDataType } from "@/lib/posts-util";
 
-export type PostType = {
-  title: string;
-  image: string;
-  date: string;
-  excerpt: string;
-  slug: string;
-};
-
-export default function PostsGrid({ posts }: { posts: PostType[] }) {
+export default function PostsGrid({ posts }: { posts: PostDataType[] }) {
   return (
     <ul className={classes.grid}>
       {posts.map((post) => (
