@@ -2,7 +2,7 @@ import FeaturedPosts from "@/components/home-page/featured-posts";
 import Hero from "@/components/home-page/hero";
 import { PostType } from "@/components/posts/posts-grid";
 
-const DUMMY_POSTS = [
+export const DUMMY_POSTS = [
   {
     slug: "getting-started-with-nextjs",
     title: "Getting Started with NextJS",
