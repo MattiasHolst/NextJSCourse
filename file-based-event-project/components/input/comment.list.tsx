@@ -2,13 +2,10 @@ import classes from "./comment-list.module.css";
 import { CommentDataType } from "@/pages/api/comments/[id]";
 
 interface Props {
-  comments: CommentDataType[] | undefined;
+  comments: CommentDataType[];
 }
 
 function CommentList(props: Props) {
-  if (!props.comments) {
-    return;
-  }
   return (
     <ul className={classes.comments}>
       {props.comments.map((comment) => (

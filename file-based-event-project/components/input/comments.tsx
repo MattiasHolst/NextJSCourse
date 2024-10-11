@@ -79,7 +79,7 @@ function Comments(props: Props) {
         {showComments ? "Hide" : "Show"} Comments
       </button>
       {showComments && <NewComment onAddComment={addCommentHandler} />}
-      {showComments && !isFetchingComments && (
+      {showComments && !isFetchingComments && commentData && (
         <CommentList comments={commentData} />
       )}
       {showComments && isFetchingComments && <p>Loading...</p>}
