@@ -7,7 +7,7 @@ interface Props {
 
 function CommentList(props: Props) {
   if (!props.comments) {
-    return <p>Loading...</p>;
+    return;
   }
   return (
     <ul className={classes.comments}>
