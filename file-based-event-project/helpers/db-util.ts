@@ -5,7 +5,7 @@ export async function connectDatabase() {
     "mongodb+srv://holstmattias:mZ8cZNgL4gR2xwqW@cluster0.cqxwd.mongodb.net/events?retryWrites=true&w=majority&appName=Cluster0"
   );
 
-  console.log('client is : ', client);
+  console.log("client is : ", client);
 
   return client;
 }
@@ -22,11 +22,16 @@ export async function insertDocument(
 export async function getAllDocuments(
   client: MongoClient,
   collection: string,
-  sort: Sort
+  sort: Sort,
+  filter = {}
 ) {
   const db = client.db();
 
-  const documents = await db.collection(collection).find().sort(sort).toArray();
+  const documents = await db
+    .collection(collection)
+    .find(filter)
+    .sort(sort)
+    .toArray();
 
   return documents;
 }

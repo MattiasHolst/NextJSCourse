@@ -75,7 +75,12 @@ export default async function handler(
   }
   if (req.method === "GET") {
     try {
-      const documents = await getAllDocuments(client, "comments", { _id: -1 });
+      const documents = await getAllDocuments(
+        client,
+        "comments",
+        { _id: -1 },
+        { eventId: eventId }
+      );
       const comments = documents.map(
         (doc) =>
           ({
