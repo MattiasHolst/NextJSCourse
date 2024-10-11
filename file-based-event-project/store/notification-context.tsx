@@ -1,4 +1,4 @@
-import { createContext, useState } from "react";
+import { createContext, useState, useEffect } from "react";
 
 type NotificationDataType = {
   title: string;
@@ -26,6 +26,22 @@ export function NotificationContextProvider({
   const [activeNotification, setActiveNotification] = useState<
     NotificationDataType | null | undefined
   >();
+
+  useEffect(() => {
+    if (
+      activeNotification &&
+      (activeNotification.status === "success" ||
+        activeNotification.status === "error")
+    ) {
+      const timer = setTimeout(() => {
+        setActiveNotification(null);
+      }, 3000);
+
+      return () => {
+        clearTimeout(timer);
+      };
+    }
+  }, [activeNotification]);
   function showNotificationHandler(notificationData: NotificationDataType) {
     setActiveNotification(notificationData);
   }
