@@ -2,7 +2,6 @@ import { AppProps } from "next/app";
 import "../styles/globals.css";
 import Layout from "@/components/layout/layout";
 import Head from "next/head";
-import Notification from "@/components/ui/notification";
 import { NotificationContextProvider } from "@/store/notification-context";
 
 function MyApp({ Component, pageProps }: AppProps) {
@@ -18,7 +17,6 @@ function MyApp({ Component, pageProps }: AppProps) {
           />
         </Head>
         <Component {...pageProps} />;
-        <Notification message="This is a test" status="pending" title="Test" />
       </Layout>
     </NotificationContextProvider>
   );
