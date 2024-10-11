@@ -1,7 +1,9 @@
-import fs from "fs";
-import { MongoClient, WithId } from "mongodb";
+import {
+  connectDatabase,
+  getAllDocuments,
+  insertDocument,
+} from "@/helpers/db-util";
 import { NextApiRequest, NextApiResponse } from "next";
-import path from "path";
 
 type Data = {
   message?: string;
@@ -20,73 +22,78 @@ export default async function handler(
   res: NextApiResponse<Data>
 ) {
   const eventId = req.query.id;
-
-  const client = await MongoClient.connect(
-    "mongodb+srv://holstmattias:mZ8cZNgL4gR2xwqW@cluster0.cqxwd.mongodb.net/events?retryWrites=true&w=majority&appName=Cluster0"
-  );
+  let client;
+  try {
+    client = await connectDatabase();
+  } catch (error) {
+    res.status(500).json({ message: "Connecting to the db failed" });
+    return;
+  }
 
   if (req.method === "POST") {
     const commentData = req.body as CommentDataType;
 
     if (!commentData.email || !commentData.email.includes("@")) {
       res.status(422).json({ message: "Invalid Email" });
+      client.close();
       return;
     }
     if (!commentData.name) {
       res.status(422).json({ message: "Name not specified" });
+      client.close();
       return;
     }
     if (!commentData.text) {
       res.status(422).json({ message: "Text not specified" });
+      client.close();
       return;
     }
     if (!eventId) {
       res.status(422).json({ message: "Eventid not sepcified" });
+      client.close();
       return;
     }
 
-    
-
     const newComment = {
-      id: "",
+      _id: "",
       email: commentData.email,
       name: commentData.name,
       text: commentData.text,
       eventId: eventId as string,
     };
 
-    const db = client.db();
+    let result;
+    try {
+      result = await insertDocument(client, "comments", newComment);
 
-    const result = await db.collection("comments").insertOne(newComment);
+      newComment._id = result.insertedId.toString();
 
-    newComment.id = result.insertedId.toString();
-
-    res.status(201).json({ message: "Success!", comments: [newComment] });
+      res.status(201).json({ message: "Success!", comments: [newComment] });
+    } catch (error) {
+      res.status(500).json({ message: "Inserting comment failed" });
+    }
   }
   if (req.method === "GET") {
-    const db = client.db();
+    try {
+      const documents = await getAllDocuments(client, "comments", { _id: -1 });
+      const comments = documents.map(
+        (doc) =>
+          ({
+            _id: doc._id?.toString(),
+            email: doc.email,
+            name: doc.name,
+            text: doc.text,
+            eventId: doc.eventId,
+          } as CommentDataType)
+      );
 
-    const documents = await db
-      .collection("comments")
-      .find()
-      .sort({ _id: -1 })
-      .toArray();
-
-    const comments = documents.map(
-      (doc) =>
-        ({
-          _id: doc._id?.toString(),
-          email: doc.email,
-          name: doc.name,
-          text: doc.text,
-          eventId: doc.eventId,
-        } as CommentDataType)
-    );
-
-    res.status(200).json({
-      message: "Success!",
-      comments: comments,
-    });
+      res.status(200).json({
+        message: "Success!",
+        comments: comments,
+      });
+    } catch (error) {
+      res.status(500).json({ message: "Getting comments failed" });
+    }
   }
 
   client.close();

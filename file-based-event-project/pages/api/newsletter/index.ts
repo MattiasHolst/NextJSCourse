@@ -1,5 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { MongoClient } from "mongodb";
+import { connectDatabase, insertDocument } from "@/helpers/db-util";
 
 type Data = {
   message?: string;
@@ -8,22 +9,6 @@ type Data = {
 export type NewsletterPostType = {
   email: string;
 };
-
-async function connectDatabase() {
-  const client = await MongoClient.connect(
-    "mongodb+srv://holstmattias:mZ8cZNgL4gR2xwqW@cluster0.cqxwd.mongodb.net/events?retryWrites=true&w=majority&appName=Cluster0"
-  );
-
-  return client;
-}
-
-async function insertDocument(
-  client: MongoClient,
-  document: { email: string }
-) {
-  const db = client.db();
-  await db.collection("newsletter").insertOne(document);
-}
 
 export default async function handler(
   req: NextApiRequest,
@@ -45,7 +30,7 @@ export default async function handler(
       return;
     }
     try {
-      await insertDocument(client, { email: email });
+      await insertDocument(client, "newsletter", { email: email });
       client.close();
     } catch (error) {
       res.status(500).json({ message: "Inserting data failed" });
