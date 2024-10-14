@@ -1,89 +1,46 @@
-import ReactMarkdown, { Components } from "react-markdown";
-import React from "react";
+import ReactMarkdown from "react-markdown";
 import Image from "next/image";
-import { Element, ElementContent, Text } from "hast";
-import { PostDataType } from "@/lib/posts-util";
-import classes from "./post-content.module.css";
+import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
+import { atomDark } from "react-syntax-highlighter/dist/cjs/styles/prism";
+
 import PostHeader from "./post-header";
+import classes from "./post-content.module.css";
+import { PostDataType } from "@/lib/posts-util";
 
-type MarkdownImage = {
-  type: string;
-  tagName: string;
-  properties: {
-    src: string;
-    alt: string;
-  };
-};
-
-export default function PostContent({ post }: { post: PostDataType }) {
+function PostContent({ post }: { post: PostDataType }) {
   const imagePath = `/images/posts/${post.slug}/${post.image}`;
 
-  function isMarkdownImage(element: any): element is MarkdownImage {
-    return (
-      element.type === "element" &&
-      element.tagName === "img" &&
-      element.properties &&
-      typeof element.properties.src === "string"
-    );
-  }
+  const customRenderers = {
+    p({ ...props }) {
+      const { node } = props;
 
-  const customComponent: Partial<Components> = {
-    p({ node, ...props }) {
-      if (!node) {
-        return <p></p>;
-      }
+      if (node.children[0].tagName === "img") {
+        const image = node.children[0];
 
-      const renderNode = (
-        node: ElementContent,
-        index: number
-      ): React.ReactNode => {
-        if (node.type === "text") {
-          return (
-            <React.Fragment key={index}>{(node as Text).value}</React.Fragment>
-          );
-        } else if (node.type === "element") {
-          const element = node as Element;
-          const children = element.children.map(renderNode);
-
-          if (element.tagName === "img") {
-            const { src, alt } = element.properties as {
-              src: string;
-              alt: string;
-            };
-            return (
-              <div className={classes.image}>
-                <Image
-                  key={index}
-                  src={`/images/posts/${post.slug}/${src}`}
-                  alt={alt}
-                  width={500}
-                  height={300}
-                />
-              </div>
-            );
-          }
-
-          return React.createElement(
-            element.tagName,
-            { ...element.properties, key: index },
-            ...children
-          );
-        }
-        return null;
-      };
-
-      const containsImage = node.children.some((child) =>
-        isMarkdownImage(child)
-      );
-
-      if (containsImage) {
         return (
-          <>{node.children.map((child, index) => renderNode(child, index))}</>
+          <div className={classes.image}>
+            <Image
+              src={`/images/posts/${post.slug}/${image.properties.src}`}
+              alt={image.properties.alt}
+              width={600}
+              height={300}
+            />
+          </div>
         );
       }
 
+      return <p>{props.children}</p>;
+    },
+
+    code({ ...props }) {
+      const { className, children } = props;
+      const language = className.split("-")[1]; // className is something like language-js => We need the "js" part here
       return (
-        <p>{node.children.map((child, index) => renderNode(child, index))}</p>
+        <SyntaxHighlighter
+          style={atomDark}
+          language={language}
+          children={children}
+        />
       );
     },
   };
@@ -91,7 +48,9 @@ export default function PostContent({ post }: { post: PostDataType }) {
   return (
     <article className={classes.content}>
       <PostHeader title={post.title} imageUrl={imagePath} />
-      <ReactMarkdown components={customComponent}>{post.content}</ReactMarkdown>
+      <ReactMarkdown components={customRenderers}>{post.content}</ReactMarkdown>
     </article>
   );
 }
+
+export default PostContent;
