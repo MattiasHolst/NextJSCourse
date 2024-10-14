@@ -1,14 +1,22 @@
 import PostContent from "@/components/posts/post-detail/post-content";
 import { getPostData, getPostsFiles, PostDataType } from "@/lib/posts-util";
 import { GetStaticPropsContext } from "next";
+import Head from "next/head";
 
 interface Props {
   post: PostDataType;
 }
 
 export default function PostDetailPage(props: Props) {
-  console.log('post is : ', props.post);
-  return <PostContent post={props.post} />;
+  return (
+    <>
+      <Head>
+        <title>{props.post.title}</title>
+        <meta name="description" content={props.post.excerpt} />
+      </Head>
+      <PostContent post={props.post} />;
+    </>
+  );
 }
 
 export function getStaticProps(context: GetStaticPropsContext) {
