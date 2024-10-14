@@ -7,6 +7,7 @@ interface Props {
 }
 
 export default function PostDetailPage(props: Props) {
+  console.log('post is : ', props.post);
   return <PostContent post={props.post} />;
 }
 
