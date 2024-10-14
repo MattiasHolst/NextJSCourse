@@ -14,12 +14,15 @@ export type PostDataType = {
   isFeatured: boolean;
 };
 
-function getPostData(fileName: string) {
-  const filePath = path.join(postDirectory, fileName);
+export function getPostsFiles() {
+  return fs.readdirSync(postDirectory);
+}
+
+export function getPostData(postIdentifier: string) {
+  const postSlug = postIdentifier.replace(/\.md$/, ""); //removes the file extension
+  const filePath = path.join(postDirectory, `${postSlug}.md`);
   const fileContent = fs.readFileSync(filePath, "utf-8");
   const { data, content } = matter(fileContent);
-
-  const postSlug = fileName.replace(/\.md$/, ""); //removes the file extension
 
   const postData = {
     slug: postSlug,
@@ -31,7 +34,7 @@ function getPostData(fileName: string) {
 }
 
 export function getAllPosts() {
-  const postFiles = fs.readdirSync(postDirectory);
+  const postFiles = getPostsFiles();
 
   const allPosts = postFiles.map((postFile) => {
     return getPostData(postFile);
