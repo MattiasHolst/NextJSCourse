@@ -1,4 +1,6 @@
+import ReactDOM from "react";
 import classes from "./notification.module.css";
+import { createPortal } from "react-dom";
 
 interface Props {
   title: string;
@@ -20,13 +22,20 @@ function Notification(props: Props) {
   }
 
   const cssClasses = `${classes.notification} ${statusClasses}`;
+  const notificationElement = document.getElementById("notifications");
 
-  return (
-    <div className={cssClasses}>
-      <h2>{title}</h2>
-      <p>{message}</p>
-    </div>
-  );
+  if (notificationElement) {
+    return createPortal(
+      <div className={cssClasses}>
+        <h2>{title}</h2>
+        <p>{message}</p>
+      </div>,
+      notificationElement
+    );
+  } else {
+    console.error("Notification element not found");
+    return null;
+  }
 }
 
 export default Notification;
