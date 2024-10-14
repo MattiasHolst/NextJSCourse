@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { MongoClient, ObjectId } from "mongodb";
 
-type ContactType = {
+export type ContactType = {
   _id?: ObjectId;
   email: string;
   name: string;
