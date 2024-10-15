@@ -34,7 +34,7 @@ function PostContent({ post }: { post: PostDataType }) {
 
     code({ ...props }) {
       const { className, children } = props;
-      const language = className.split("-")[1]; // className is something like language-js => We need the "js" part here
+      const language = className.split("-")[1];
       return (
         <SyntaxHighlighter
           style={atomDark}

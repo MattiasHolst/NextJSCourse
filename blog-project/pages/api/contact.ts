@@ -13,9 +13,8 @@ type Data = {
 };
 
 export async function connectDatabase() {
-  const client = await MongoClient.connect(
-    "mongodb+srv://holstmattias:mZ8cZNgL4gR2xwqW@cluster0.cqxwd.mongodb.net/my-site?retryWrites=true&w=majority&appName=Cluster0"
-  );
+  const connectionString = `mongodb+srv://${process.env.mongodb_username}:${process.env.mongodb_password}@${process.env.mongodb_clustername}.cqxwd.mongodb.net/${process.env.mongodb_database}?retryWrites=true&w=majority&appName=Cluster0`;
+  const client = await MongoClient.connect(connectionString);
 
   return client;
 }
