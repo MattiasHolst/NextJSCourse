@@ -1,6 +1,7 @@
 import { FormEvent, useRef, useState } from "react";
 import classes from "./auth-form.module.css";
 import { signIn } from "next-auth/react";
+import { useRouter } from "next/router";
 
 async function createUser(email: string, password: string) {
   const response = await fetch("/api/auth/signup", {
@@ -21,6 +22,7 @@ function AuthForm() {
   const [isLogin, setIsLogin] = useState(true);
   const emailRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
+  const router = useRouter();
 
   function switchAuthModeHandler() {
     setIsLogin((prevState) => !prevState);
@@ -44,7 +46,7 @@ function AuthForm() {
       });
 
       if(result && !result.error){
-        
+        router.replace('/profile');
       }
     } else {
       try {
