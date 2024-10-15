@@ -1,4 +1,3 @@
-import { DUMMY_NEWS } from "@/dummy-news";
 import sql from "better-sqlite3";
 
 export type NewsType = {
