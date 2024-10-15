@@ -11,8 +11,7 @@ export default function PostItem({ post }: { post: PostDataType }) {
   });
 
   const imagePath = `/images/posts/${post.slug}/${post.image}`;
-
-  console.log('imagePath is : ', imagePath);
+  
   const linkPath = `/posts/${post.slug}`;
   return (
     <li className={classes.post}>
