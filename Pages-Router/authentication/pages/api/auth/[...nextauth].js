@@ -3,7 +3,8 @@ import { connectToDatabase } from "@/lib/db";
 import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 
-export default NextAuth({
+export const authOptions = {
+  secret: process.env.AUTH_SECRET,
   session: {
     strategy: "jwt",
   },
@@ -13,6 +14,11 @@ export default NextAuth({
         const client = await connectToDatabase();
 
         const usersCollection = client.db().collection("users");
+
+        if (!credentials) {
+          client.close();
+          throw new Error("No credentials");
+        }
 
         const user = await usersCollection.findOne({
           email: credentials?.email,
@@ -24,7 +30,7 @@ export default NextAuth({
         }
 
         const isValid = await verifyPassword(
-          credentials.password,
+          credentials?.password,
           user.password
         );
 
@@ -38,4 +44,6 @@ export default NextAuth({
       },
     }),
   ],
-});
+};
+
+export default NextAuth(authOptions);
